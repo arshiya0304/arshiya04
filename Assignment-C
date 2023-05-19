@@ -1,0 +1,49 @@
+#include<stdio.h>
+#include<math.h>
+struct Tower{
+int x;
+int y;
+int quality;
+};
+struct Coordinate{
+int x;
+int y;
+};
+struct Coordinate maxNetQuality(struct Tower towers[], int numTower, int radius){
+int maxQuality=0;
+struct Coordinate maxCoordinate={0,0};
+int x,y,i;
+for(x=-radius; x<=radius; x++){
+for(y=-radius; y<=radius; y++){
+int totalQuality=0;
+for(i=0; i<numTowers; i++){
+int xi=towers[i].x;
+int yi=towers[i].y;
+int qi=towers[i].quality;
+double d=sqrt(pow(xi-x,2)+pow(yi-y,2));
+if(d<=radius){
+totalQuality+=qi/(1+d);
+}
+}
+if(totalQuality>maxQuality){
+maxQuality=totalQuality;
+maxCoordinate.x=x;
+maxCoordinate.y=y;
+}else if(totalQuality==maxQuality){
+if(x<maxCoordinate.x||(x==maxCoordinate.x && y<maxCoordinate.y)){
+maxCoordinate.x=x;
+maxCoordinate.y=y;
+}
+}
+}
+}
+return maxCoordinate;
+}
+int main() {
+struct Tower towers[]={{1,2,5},{2,1,7},{3,1,9}};
+int numTowers=sizeof(towers)/sizeof(towers[0]);
+int radius=2;
+struct coordinate result=maxNetQuality(towers,numTowers,radius);
+printf('[%d,%d]\n",result.x,result.y);
+return 0;
+}
